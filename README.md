@@ -8,3 +8,4 @@ decription<br>
 <p><i>npm install</i></p>
 <h2>Why make this?</h2>
 <p>To understand react and have some fun with code</p>
+![Screenshot](meetups.png)
