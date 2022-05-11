@@ -8,10 +8,6 @@ function AllMeetUpsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [meetupData, setMeetupData] = useState([]);
 
-  const ctx = useContext(FavoritesContext);
-
-  console.log()
-
   useEffect(() => {
     setIsLoading(true);
     fetch('https://react-meetups-539a2-default-rtdb.firebaseio.com/meetups.json')
