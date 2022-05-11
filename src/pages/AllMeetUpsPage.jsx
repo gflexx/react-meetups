@@ -1,30 +1,52 @@
+import { useState, useEffect, useContext } from "react";
+
 import React from "react";
 import MeetupList from "../components/meetups/MeetupList";
-
-const DATA = [
-  {
-    id: '1',
-    title: 'Nairobi',
-    image: 'https://urbankenyans.com/wp-content/uploads/2018/10/nairobi.jpg',
-    description: 'This is the capital city of kenya. Has among the tallest buildings in Africa',
-  },{
-    id: '2',
-    title: 'Mt Kenya',
-    image: 'https://www.planetware.com/wpimages/2020/02/kenya-in-pictures-beautiful-places-to-photograph-mount-kenya.jpg',
-    description: 'This is the second tallest mountain in Africa, featuring an ice cap'
-  },{
-    id: '3',
-    title: 'Chania Falls',
-    image: 'https://www.planetware.com/wpimages/2020/02/kenya-in-pictures-beautiful-places-to-photograph-chania-falls-aberdares.jpg',
-    description: 'This are the tallest waterfalls in kenya. Found near Thika which is close to nairobi'
-  }
-]
+import FavoritesContext from "../storage/FavoritesContext";
 
 function AllMeetUpsPage() {
+  const [isLoading, setIsLoading] = useState(true);
+  const [meetupData, setMeetupData] = useState([]);
+
+  const ctx = useContext(FavoritesContext);
+
+  console.log()
+
+  useEffect(() => {
+    setIsLoading(true);
+    fetch('https://react-meetups-539a2-default-rtdb.firebaseio.com/meetups.json')
+    .then((response) => {
+        return response.json();
+    })
+    .then((data) => {
+        const meetups = [];
+
+        for (const key in data){
+          const meetup = {
+            id: key,
+            ...data[key]
+          };
+          meetups.push(meetup);
+        }
+        setIsLoading(false)
+        setMeetupData(meetups)
+    });
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div className="text-center">
+        <div role={"status"} className="spinner-border text-info">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    )
+  }
+
   return (
-    <div>
+    <div className="mb-5">
       <p className="text-center h4 mt-3 mb-4">All Meetups</p>
-      <MeetupList meetups={DATA} />
+      <MeetupList meetups={meetupData} />
     </div>
   )
 }
